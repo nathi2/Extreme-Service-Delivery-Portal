@@ -1,19 +1,10 @@
+
 package com.example.myexsds
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.myexsds.ui.theme.MyExSDsTheme
 
 class MainActivity : ComponentActivity() {
@@ -26,10 +17,34 @@ class MainActivity : ComponentActivity() {
 
             MyExSDsTheme {
 
-                HomeScreen()
+                Nav()
 
             }
         }
     }
 }
 
+// Defining the Data Model...
+
+data class User(
+
+    val id: Int,
+    val name: String,
+    val surname: String,
+    val address: String,
+    val email: String,
+    val gender: String,
+    val contactDetails: String,
+    val username: String,
+    val password: String,
+    val role: UserRole
+
+)
+
+
+enum class UserRole {
+
+    COMMUNITY_MEMBER,
+    GOVERNMENT_OFFICIAL
+
+}

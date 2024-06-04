@@ -1,13 +1,6 @@
 package com.example.myexsds
 
 
-
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,63 +8,29 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.unit.dp
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
-
-// Defining the Data Model...
-
-data class User(
-
-    val id: Int,
-    val name: String,
-    val surname: String,
-    val address: String,
-    val email: String,
-    val gender: String,
-    val contactDetails: String,
-    val username: String,
-    val password: String,
-    val role: UserRole
-
-)
-
-
-enum class UserRole {
-
-    COMMUNITY_MEMBER,
-    GOVERNMENT_OFFICIAL
-
-}
-
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 
 
 // Creating Functions for Sign-Up and Sign-In.
 // Sign-Up Screen.
 
 @Composable
-fun SignUpScreen(onSignUp: (User) -> Unit) {
+fun SignUpScreen(navController: NavHostController, onSignUp: (User) -> Unit) {
 
     var name by remember { mutableStateOf("") }
     var surname by remember { mutableStateOf("") }
@@ -265,36 +224,36 @@ fun SignUpScreen(onSignUp: (User) -> Unit) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Button(
 
-                onClick = {
+            Button(onClick = {
+                navController.navigate("signUp")
 
-                    if (password == confirmPassword) {
+                if (password == confirmPassword) {
 
-                        val newUser = User(
+                    val newUser = User(
 
-                            id = (1..1000).random(),
-                            name = name,
-                            surname = surname,
-                            address = address,
-                            email = email,
-                            gender = gender,
-                            contactDetails = contactDetails,
-                            username = username,
-                            password = password,
-                            role = selectedRole
+                        id = (1..1000).random(),
+                        name = name,
+                        surname = surname,
+                        address = address,
+                        email = email,
+                        gender = gender,
+                        contactDetails = contactDetails,
+                        username = username,
+                        password = password,
+                        role = selectedRole
 
-                        )
+                    )
 
-                        onSignUp(newUser)
+                    onSignUp(newUser)
 
-                    } else {
+                } else {
 
-                        showError = true
-
-                    }
+                    showError = true
 
                 }
+
+            }
 
                 //   modifier = Modifier.align(Alignment.End)
 
@@ -307,98 +266,4 @@ fun SignUpScreen(onSignUp: (User) -> Unit) {
         }
 
     }
-
-}
-
-@Composable
-fun SignInScreen(users: List<User>, onSignIn: (User?) -> Unit) {
-
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var showError by remember { mutableStateOf(false) }
-
-    LazyColumn(
-
-        modifier = Modifier
-
-            .fillMaxSize()
-            .padding(16.dp),
-
-        horizontalAlignment = Alignment.CenterHorizontally
-
-    ) {
-
-        item {
-
-            Text(text = "Sign In", style = MaterialTheme.typography.headlineLarge)
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextField(
-
-                value = username,
-
-                onValueChange = { username = it },
-                label = { Text("Username") },
-
-                modifier = Modifier.fillMaxWidth()
-
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextField(
-
-                value = password,
-
-                onValueChange = { password = it },
-                label = { Text("Password") },
-
-                modifier = Modifier.fillMaxWidth(),
-
-                visualTransformation = PasswordVisualTransformation()
-
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-
-            if (showError) {
-
-                Text(text = "Invalid username or password", color = MaterialTheme.colorScheme.error)
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-            }
-
-            Button(
-
-                onClick = {
-
-                    val user = users.find { it.username == username && it.password == password }
-
-                    if (user != null) {
-
-                        onSignIn(user)
-
-                    } else {
-
-                        showError = true
-
-                    }
-
-                },
-
-                // modifier = Modifier.align(Alignment.End)
-
-            ) {
-
-                Text("Sign In")
-
-            }
-
-        }
-
-    }
-
 }
